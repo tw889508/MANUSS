@@ -7,17 +7,17 @@
 - [x] DB helpers: account CRUD queries (create, list, delete, getById, setDefault)
 - [x] DB helpers: task CRUD queries (create, list, getById, update, delete)
 - [x] MANUS API proxy module (createTask, continueTask, getTask, listTasks, deleteTask)
-- [ ] tRPC routes: account.create / account.list / account.delete / account.setDefault / account.test
-- [ ] Vitest: account CRUD + crypto tests
-- [ ] Checkpoint: 阶段一
+- [x] tRPC routes: account.create / account.list / account.delete / account.setDefault / account.test
+- [x] Vitest: account CRUD + crypto tests (18 tests passed)
+- [x] Checkpoint: 阶段一
 
 ## 阶段二：后端任务管理（创建任务 + 多轮对话 + 状态）
-- [ ] tRPC route: task.create (create new MANUS task)
-- [ ] tRPC route: task.continue (multi-turn via previous_response_id)
-- [ ] tRPC route: task.get (get task details + poll status from MANUS)
-- [ ] tRPC route: task.poll (lightweight status polling)
-- [ ] tRPC route: task.list (list user tasks with filtering)
-- [ ] tRPC route: task.delete (delete local task record)
+- [x] tRPC route: task.create (create new MANUS task)
+- [x] tRPC route: task.continue (multi-turn via previous_response_id)
+- [x] tRPC route: task.get (get task details + poll status from MANUS)
+- [x] tRPC route: task.poll (lightweight status polling)
+- [x] tRPC route: task.list (list user tasks with filtering)
+- [x] tRPC route: task.delete (delete local task record)
 - [ ] Vitest: task management tests
 - [ ] Checkpoint: 阶段二
 
