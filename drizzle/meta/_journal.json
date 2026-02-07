@@ -1,5 +1,27 @@
 {
   "version": "7",
   "dialect": "mysql",
-  "entries": []
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1770445057581,
+      "tag": "0000_bouncy_rick_jones",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1770445180987,
+      "tag": "0001_good_agent_brand",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1770445199380,
+      "tag": "0002_brainy_longshot",
+      "breakpoints": true
+    }
+  ]
 }

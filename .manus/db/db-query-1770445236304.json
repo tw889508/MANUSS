@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS `tasks` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `manusTaskId` varchar(128) NOT NULL,\n  `userId` int NOT NULL,\n  `accountId` int NOT NULL,\n  `title` varchar(512) DEFAULT 'Untitled Task',\n  `status` enum('pending','running','completed','failed','unknown') NOT NULL DEFAULT 'unknown',\n  `agentProfile` varchar(64) DEFAULT 'manus-1.6',\n  `taskMode` varchar(32) DEFAULT 'agent',\n  `projectId` varchar(128),\n  `taskUrl` varchar(512),\n  `shareUrl` varchar(512),\n  `creditUsage` int DEFAULT 0,\n  `conversationHistory` json,\n  `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  CONSTRAINT `tasks_id` PRIMARY KEY(`id`)\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4D7kZwifjMFWFqQ.root --database F6jrGxvpRt8hprXsYVFLn4 --execute CREATE TABLE IF NOT EXISTS `tasks` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `manusTaskId` varchar(128) NOT NULL,\n  `userId` int NOT NULL,\n  `accountId` int NOT NULL,\n  `title` varchar(512) DEFAULT 'Untitled Task',\n  `status` enum('pending','running','completed','failed','unknown') NOT NULL DEFAULT 'unknown',\n  `agentProfile` varchar(64) DEFAULT 'manus-1.6',\n  `taskMode` varchar(32) DEFAULT 'agent',\n  `projectId` varchar(128),\n  `taskUrl` varchar(512),\n  `shareUrl` varchar(512),\n  `creditUsage` int DEFAULT 0,\n  `conversationHistory` json,\n  `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  CONSTRAINT `tasks_id` PRIMARY KEY(`id`)\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1626
+}
