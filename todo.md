@@ -1,19 +1,46 @@
 # Project TODO
 
+## 阶段一：后端核心（账户管理 + API 代理）
 - [x] Database schema: accounts table (encrypted API key, alias)
 - [x] Database schema: tasks table (task history, conversation, status)
-- [ ] Backend: account CRUD (add, list, delete MANUS accounts)
-- [ ] Backend: API proxy to MANUS (inject API key from selected account)
-- [ ] Backend: create task (text, attachments, project_id, agent profile)
-- [ ] Backend: continue task (multi-turn via task_id/previous_response_id)
-- [ ] Backend: get task status and details
-- [ ] Backend: list tasks with filtering
-- [ ] Frontend: dark theme, global layout with sidebar
-- [ ] Frontend: account management page (add/switch/delete accounts)
-- [ ] Frontend: chat/conversation page with message input
-- [ ] Frontend: task list view with status indicators
-- [ ] Frontend: account switcher in chat header
-- [ ] Frontend: agent mode and model selector (chat/adaptive/agent, lite/1.6/max)
-- [ ] Frontend: display files/links from MANUS responses
-- [ ] Frontend: real-time polling for task status
-- [ ] Vitest tests for backend routes
+- [x] Crypto module: AES-256-GCM encrypt/decrypt for API keys
+- [x] DB helpers: account CRUD queries (create, list, delete, getById, setDefault)
+- [x] DB helpers: task CRUD queries (create, list, getById, update, delete)
+- [x] MANUS API proxy module (createTask, continueTask, getTask, listTasks, deleteTask)
+- [ ] tRPC routes: account.create / account.list / account.delete / account.setDefault / account.test
+- [ ] Vitest: account CRUD + crypto tests
+- [ ] Checkpoint: 阶段一
+
+## 阶段二：后端任务管理（创建任务 + 多轮对话 + 状态）
+- [ ] tRPC route: task.create (create new MANUS task)
+- [ ] tRPC route: task.continue (multi-turn via previous_response_id)
+- [ ] tRPC route: task.get (get task details + poll status from MANUS)
+- [ ] tRPC route: task.poll (lightweight status polling)
+- [ ] tRPC route: task.list (list user tasks with filtering)
+- [ ] tRPC route: task.delete (delete local task record)
+- [ ] Vitest: task management tests
+- [ ] Checkpoint: 阶段二
+
+## 阶段三：前端基础（布局 + 账户管理）
+- [ ] Dark theme setup, color palette in index.css
+- [ ] DashboardLayout with sidebar navigation
+- [ ] Routes: Home, Accounts, Chat, Tasks
+- [ ] Account management page (add/switch/delete accounts)
+- [ ] Checkpoint: 阶段三
+
+## 阶段四：前端对话界面
+- [ ] Chat page with message input and conversation display
+- [ ] Account switcher in chat header
+- [ ] Agent mode selector (chat/adaptive/agent)
+- [ ] Model selector (manus-1.6 / lite / max)
+- [ ] Real-time polling for task status
+- [ ] Markdown rendering for MANUS responses
+- [ ] Checkpoint: 阶段四
+
+## 阶段五：前端任务列表 + 收尾
+- [ ] Task list view with status indicators
+- [ ] Continue existing conversation from task list
+- [ ] Display files/links from MANUS responses
+- [ ] Home dashboard with quick stats
+- [ ] Final testing and polish
+- [ ] Checkpoint: 阶段五（最终交付）

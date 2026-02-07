@@ -1,11 +1,10 @@
-import { eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertUser, users, accounts, tasks, type InsertAccount, type InsertTask, type ConversationMessage } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
-// Lazily create the drizzle instance so local tooling can run without a DB.
 export async function getDb() {
   if (!_db && process.env.DATABASE_URL) {
     try {
@@ -17,6 +16,8 @@ export async function getDb() {
   }
   return _db;
 }
+
+// ─── User Helpers ───────────────────────────────────────────────
 
 export async function upsertUser(user: InsertUser): Promise<void> {
   if (!user.openId) {
@@ -85,8 +86,137 @@ export async function getUserByOpenId(openId: string) {
   }
 
   const result = await db.select().from(users).where(eq(users.openId, openId)).limit(1);
-
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+// ─── Account Helpers ────────────────────────────────────────────
+
+export async function createAccount(data: Omit<InsertAccount, "id" | "createdAt" | "updatedAt">) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const result = await db.insert(accounts).values(data);
+  const insertId = result[0].insertId;
+  return { id: insertId, ...data };
+}
+
+export async function listAccountsByUser(userId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  return db
+    .select({
+      id: accounts.id,
+      name: accounts.name,
+      apiBaseUrl: accounts.apiBaseUrl,
+      isDefault: accounts.isDefault,
+      createdAt: accounts.createdAt,
+    })
+    .from(accounts)
+    .where(eq(accounts.userId, userId))
+    .orderBy(desc(accounts.isDefault), desc(accounts.createdAt));
+}
+
+export async function getAccountById(accountId: number, userId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const result = await db
+    .select()
+    .from(accounts)
+    .where(and(eq(accounts.id, accountId), eq(accounts.userId, userId)))
+    .limit(1);
+
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function deleteAccount(accountId: number, userId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  await db.delete(accounts).where(and(eq(accounts.id, accountId), eq(accounts.userId, userId)));
+}
+
+export async function setDefaultAccount(accountId: number, userId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  // Clear all defaults for this user
+  await db.update(accounts).set({ isDefault: 0 }).where(eq(accounts.userId, userId));
+  // Set the new default
+  await db.update(accounts).set({ isDefault: 1 }).where(and(eq(accounts.id, accountId), eq(accounts.userId, userId)));
+}
+
+// ─── Task Helpers ───────────────────────────────────────────────
+
+export async function createTask(data: Omit<InsertTask, "id" | "createdAt" | "updatedAt">) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const result = await db.insert(tasks).values(data);
+  const insertId = result[0].insertId;
+  return { id: insertId, ...data };
+}
+
+export async function getTaskById(taskId: number, userId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const result = await db
+    .select()
+    .from(tasks)
+    .where(and(eq(tasks.id, taskId), eq(tasks.userId, userId)))
+    .limit(1);
+
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function getTaskByManusId(manusTaskId: string, userId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const result = await db
+    .select()
+    .from(tasks)
+    .where(and(eq(tasks.manusTaskId, manusTaskId), eq(tasks.userId, userId)))
+    .limit(1);
+
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function listTasksByUser(userId: number, accountId?: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const conditions = [eq(tasks.userId, userId)];
+  if (accountId) {
+    conditions.push(eq(tasks.accountId, accountId));
+  }
+
+  return db
+    .select()
+    .from(tasks)
+    .where(and(...conditions))
+    .orderBy(desc(tasks.updatedAt));
+}
+
+export async function updateTask(
+  taskId: number,
+  userId: number,
+  data: Partial<Pick<InsertTask, "title" | "status" | "taskUrl" | "shareUrl" | "creditUsage" | "conversationHistory">>
+) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  await db
+    .update(tasks)
+    .set(data)
+    .where(and(eq(tasks.id, taskId), eq(tasks.userId, userId)));
+}
+
+export async function deleteTask(taskId: number, userId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  await db.delete(tasks).where(and(eq(tasks.id, taskId), eq(tasks.userId, userId)));
+}
